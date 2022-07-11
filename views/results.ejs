@@ -1,0 +1,50 @@
+<% include partials/header %>
+
+<!-- navbar -->
+<% include partials/navbar %>
+<!-- /navbar -->
+
+<!-- flash -->
+<% include partials/flash %>
+<!-- /flash -->
+
+<div class="container">
+  <!-- search form -->
+  <% include partials/searchform %>
+  <!-- /search form -->
+
+  <% if(response == "False") { %>
+  <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+    <div class="card-header">ERROR!!</div>
+    <div class="card-body">
+      <h4 class="card-title">SORRY!!</h4>
+      <p class="card-text"><%= error %></p>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="row">
+    <% for (var i = 0; i < movies.length; i++) {  %>
+    <% var imdbid = movies[i].imdbID %>
+    <% if(movies[i].Poster != "N/A") { %>
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="thumbnail moviecard">
+        <div class="block" style="text-align: center">
+          <a href="/search/moviedetails/<%= imdbid %>">
+            <img src="<%= movies[i].Poster %>" alt="Image Not Available"
+              onerror="this.onerror=null;this.src='/Images/notfound.jpg';" />
+          </a>
+          <div>
+            <a href="/search/moviedetails/<%= imdbid %>">
+              <%= movies[i].Title %>
+            </a>
+            <span class="year">(<%= movies[i].Year %>)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %> <% } %>
+  </div>
+  <% } %>
+</div>
+
+<% include partials/footer %>

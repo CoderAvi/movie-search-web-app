@@ -1,0 +1,47 @@
+<% include partials/header %>
+
+<!-- navbar -->
+<% include partials/navbar %>
+<!-- /navbar -->
+
+<!-- flash -->
+<% include partials/flash %>
+<!-- /flash -->
+
+<div class="container">
+  <form class="form-group" action="/user/finduser" method="GET">
+    <input class="form-control" type="text" name="searchuserquery"
+      placeholder="Find users by username, First name or Last name" />
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-search"></i>
+      Search
+    </button>
+  </form>
+
+  <% for (let i in users) { %> <% let user = users[i]; %>
+  <div class="card my-profile-card m-0 m-b-5 m-r-5 float-left" style="width: 24rem">
+    <div class="card-body profile">
+      <!-- <img src=<%=`${currentUser.image}`%> alt="NA" style="width:100%"> -->
+      <h3 class="card-title"><%= user.firstname %> <%= user.lastname %></h3>
+      <p class="card-text">
+        <i class="fas fa-user"></i>
+        <%= user.username %>
+      </p>
+      <p class="card-text">
+        <i class="fas fa-envelope"></i>
+        <a style="color: #D44638" href="mailto:<%=user.email%>">
+          <%= user.email %>
+        </a>
+      </p>
+      <div>
+        <i class="fas fa-thumbs-up" style="color: green" data-toggle="tooltip" title="Liked Movies"></i>
+        <%= user.likedMovielist.length %> &nbsp;
+        <i class="fas fa-thumbs-down" style="color: red" data-toggle="tooltip" title="Disliked Movies"></i>
+        <%= user.dislikedMovielist.length %>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>
+
+<% include partials/footer %>

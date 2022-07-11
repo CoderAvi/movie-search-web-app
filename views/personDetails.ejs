@@ -1,0 +1,96 @@
+<% include partials/header %>
+
+<!-- navbar -->
+<% include partials/navbar %>
+<!-- /navbar -->
+
+<!-- flash -->
+<% include partials/flash %>
+<!-- /flash -->
+
+<!-- Search Bar -->
+<div class="container">
+  <% include partials/searchform %>
+
+  <% baseUrl = 'https://image.tmdb.org/t/p/w300' %>
+  <% imgUrl = baseUrl + person.profile_path %>
+  <div class="d-flex flex-column flex-md-row justify-content-start">
+    <div class="m-r-20">
+      <img src="<%=imgUrl%>" alt="N/A">
+    </div>
+    <div>
+      <div class="m-b-20">
+        <h2><%=person.name%></h2>
+        <h4><%= person.known_for_department %></h4>
+      </div>
+      <div class="m-b-20">
+        <strong>Gender:</strong> <%= person.gender == 1 ? "Female" : "Male" %>
+      </div>
+      <div class="m-b-20">
+        <strong>Born:</strong> <%= person.birthday %>
+      </div>
+      <div class="m-b-20">
+        <strong>Birth Place:</strong> <%= person.birthplace %>
+      </div>
+      <% if(person.deathday != null) { %>
+      <div class="m-b-20">
+        <strong>Died:</strong> <%= person.deathday %>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  <div class="m-t-20">
+    <%= person.biography %>
+  </div>
+
+  <hr>
+  <!-- Known For -->
+  <h2 class="m-b-20">Known For</h2>
+
+  <div class="d-flex flex-column flex-md-row justify-content-start">
+    <% person.known_for.forEach(item => { %>
+    <% basePosterUrl = 'https://image.tmdb.org/t/p/w185' %>
+    <% posterUrl = basePosterUrl + item.poster_path %>
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="thumbnail moviecard">
+        <div class="" style="text-align: center">
+          <% if(item.media_type == 'movie') { %>
+          <div>
+            <a href="<%=`/getImdbIdofClickedMovie/${item.id}`%>">
+              <img src="<%=posterUrl%>" alt="N/A">
+            </a>
+          </div>
+          <div>
+            <a href="<%=`/getImdbIdofClickedMovie/${item.id}`%>">
+              <%=item.title%>
+            </a>
+            <span>(<%= item.release_date.split('-')[0] %>)</span>
+          </div>
+          <% } else { %>
+          <div>
+            <a href="<%=`/getImdbIdofClickedTv/${item.id}`%>">
+              <img src="<%=posterUrl%>" alt="N/A">
+            </a>
+          </div>
+          <div>
+            <a href="<%=`/getImdbIdofClickedTv/${item.id}`%>">
+              <%=item.original_name%>
+            </a>
+            <span>(<%= item.first_air_date.split('-')[0] %>)</span>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+  <hr>
+  <!-- Imdb Button -->
+  <a href="https://www.imdb.com/name/<%=person.imdbid%>" target="_blank">
+    <button type="button" class="btn btn-primary btn-lg">View On IMDb</button>
+  </a>
+  <hr>
+</div>
+
+<% include partials/footer %>

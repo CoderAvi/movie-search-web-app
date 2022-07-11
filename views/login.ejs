@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags-->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title Page-->
+  <title>Login Form</title>
+
+  <!-- Font special for pages-->
+  <link
+    href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet" />
+
+  <!-- My links -->
+  <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/CSS/style.css" />
+
+  <!-- Main CSS-->
+  <link href="/CSS/auth.css" rel="stylesheet" media="all" />
+</head>
+
+<body>
+  <!-- navbar -->
+  <% include partials/navbar %>
+  <!-- /navbar -->
+
+  <div class="page-wrapper bg-gra-01 p-t-10 m-t-auto p-b-100 font-poppins">
+    <!-- flash -->
+    <div class="container">
+      <% if(error && error.length > 0) { %>
+      <div style="margin-top: 75px; margin-bottom: -75px" class="alert alert-danger">
+        <%= error %>
+      </div>
+      <% } if(success && success.length > 0) { %>
+      <div style="margin-top: 75px; margin-bottom: -75px" class="alert alert-success">
+        <%= success %>
+      </div>
+      <% } %>
+    </div>
+    <!-- /flash -->
+    <div class="wrapper wrapper--w780 mt-0">
+      <div class="card card-3">
+        <div class="card-heading"></div>
+        <div class="card-body">
+          <h2 class="title">Login Info</h2>
+          <form action="/user/login" method="POST">
+            <div class="input-group">
+              <input class="input--style-3 p-10" type="text" placeholder="Username" name="username" />
+            </div>
+            <div class="input-group">
+              <input class="input--style-3 p-10" type="password" placeholder="Password" name="password" />
+            </div>
+            <div class="p-t-10">
+              <button class="btn btn--pill btn--green" type="submit">
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% include partials/footer %>
+</body>
+
+</html>

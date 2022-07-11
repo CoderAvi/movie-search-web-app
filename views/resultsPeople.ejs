@@ -1,0 +1,52 @@
+<% include partials/header %>
+
+<!-- navbar -->
+<% include partials/navbar %>
+<!-- /navbar -->
+
+<!-- flash -->
+<% include partials/flash %>
+<!-- /flash -->
+
+<div class="container">
+  <!-- search form -->
+  <% include partials/searchform %>
+  <!-- /search form -->
+
+  <% if(people.total_results == 0) { %>
+  <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+    <div class="card-header">ERROR!!</div>
+    <div class="card-body">
+      <h4 class="card-title">SORRY!!</h4>
+      <p class="card-text">No one found</p>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="row">
+    <% for (var i = 0; i < people.results.length; i++) { %> <% let person =
+    people.results[i]; %> <% let posterBaseUrl =
+    "https://image.tmdb.org/t/p/w300"; %> <% let posterUrl = posterBaseUrl +
+    person.profile_path; %> <% if(person.gender != 0) { %>
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="thumbnail moviecard">
+        <div class="block" style="text-align: center">
+          <a href="<%=`/search/persondetails/${person.id}`%>">
+            <img src="<%= posterUrl %>" alt="Image Not Available"
+              onerror="this.onerror=null;this.src='/Images/notfound.jpg';" data-toggle="collapse"
+              data-target="#collapseExample" />
+          </a>
+          <div>
+            <a href="<%=`/search/persondetails/${person.id}`%>">
+              <%= person.name %>
+            </a>
+            <span class="year">(<%= person.gender==1 ? "F" : "M" %>)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %> <% } %>
+  </div>
+  <% } %>
+</div>
+
+<% include partials/footer %>

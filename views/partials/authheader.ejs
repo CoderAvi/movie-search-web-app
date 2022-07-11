@@ -1,0 +1,28 @@
+<ul class="navbar-nav">
+  <% if(!currentUser) { %>
+  <li class="nav-item">
+    <a class="nav-link" href="/user/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
+  </li>
+  <% } else { %>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-user-alt"></i> <%= currentUser.firstname %> <%= currentUser.lastname %>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="/user/myprofile">My Profile</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="/user/mywatchlist">My Watchlist</a>
+      <a class="dropdown-item" href="/user/likedmovielist">My Liked Movies</a>
+      <a class="dropdown-item" href="/user/dislikedmovielist">My Disliked Movies</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="/user/allusers">Show All Users</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/user/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </li>
+  <% } %>
+</ul>

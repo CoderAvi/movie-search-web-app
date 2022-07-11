@@ -1,0 +1,48 @@
+<% include partials/header %>
+
+<!-- navbar -->
+<% include partials/navbar %>
+<!-- /navbar -->
+
+<!-- flash -->
+<% include partials/flash %>
+<!-- /flash -->
+
+<div class="container">
+  <div class="jumbotron">
+    <div class="display-4">Movie Search Web App</div>
+    <p class="lead">This is a Simple Movie Search Web App</p>
+    <hr class="my-4" />
+    <!--Form for searching movie with movie name -->
+    <% include partials/searchform %>
+  </div>
+
+  <!-- Trending -->
+  <div class="row">
+    <% for (var i = 0; i < movies.length; i++) { %> <% var movie = movies[i]; %>
+    <% if(movie.poster_path != "N/A") { %>
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="thumbnail moviecard">
+        <div class="block" style="text-align: center">
+          <% url = `/getImdbIdofClickedMovie/${movie.id}` %>
+          <a href="<%=url%>">
+            <% imageUrl = 'https://image.tmdb.org/t/p/w300/' + movie.poster_path
+            %>
+            <img src="<%= imageUrl %>" alt="Image Not Available"
+              onerror="this.onerror=null;this.src='Images/notfound.jpg';" />
+          </a>
+          <div>
+            <a href="/getImdbIdofClickedMovie">
+              <%= movie.title %>
+            </a>
+            <span class="year">(<%= movie.release_date.split("-")[0] %>)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %> <% } %>
+    <!-- /Trending -->
+  </div>
+
+  <% include partials/footer %>
+</div>

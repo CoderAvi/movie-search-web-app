@@ -1,0 +1,39 @@
+<% include partials/header %>
+
+<!-- navbar -->
+<% include partials/navbar %>
+<!-- /navbar -->
+
+<!-- flash -->
+<% include partials/flash %>
+<!-- /flash -->
+
+<div class="container">
+  <!-- search form -->
+  <% include partials/searchform %>
+  <!-- /search form -->
+
+  <div class="row">
+    <% for (var i = 0; i < movies.length; i++) { %> <% var movie = movies[i]; %>
+    <% if(movie.poster != "N/A") { %>
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="thumbnail moviecard">
+        <div class="block" style="text-align: center">
+          <a href="/search/moviedetails/<%= movie.imdbId %>">
+            <img src="<%= movie.poster %>" alt="Image Not Available"
+              onerror="this.onerror=null;this.src='Images/notfound.jpg';" />
+          </a>
+          <div>
+            <a href="/search/moviedetails/<%= movie.imdbId %>">
+              <%= movie.title %>
+            </a>
+            <span class="year">(<%= movie.year %>)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %> <% } %>
+  </div>
+</div>
+
+<% include partials/footer %>

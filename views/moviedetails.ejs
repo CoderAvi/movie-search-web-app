@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Clicked Movie title on browser title with app name -->
+	<title><%= movie.title %> (<%= movie.year %>) - MovieSSS</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+		integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<link rel="stylesheet" href="/CSS/style.css">
+</head>
+
+<body>
+
+	<!-- navbar -->
+	<% include partials/navbar %>
+	<!-- /navbar -->
+
+	<!-- flash -->
+	<% include partials/flash %>
+	<!-- /flash -->
+
+	<% var genrearray = movie.genre.split(","); %>
+	<% var countryarray = movie.country.split(","); %>
+
+	<% if(movie.type == "movie") { %>
+	<% var movietype = "m" %>
+	<% } else { %>
+	<% var movietype = "tv" %>
+	<% } %>
+
+	<% var moviename = movie.title.toLowerCase().split(" ").join("_") %>
+
+	<% if(movie.website == undefined) { %>
+	<% movie.website = "https://www.facebook.com/"+movie.title.split(" ").join(""); %>
+	<% } %>
+
+	<!-- Runtime fix -->
+	<% runtime = (movie.runtime) ? movie.runtime : movie.runtime1 %>
+	<% runtime = runtime.split(" ")[0] %>
+
+	<!-- Search Bar -->
+	<div class="container">
+		<% include partials/searchform %>
+
+		<div class="jumbotron">
+			<!-- Row 1 of Jumbotron -->
+			<div
+				class="d-flex flex-column justify-content-start flex-md-row align-items-md-center justify-content-md-around">
+				<!-- Title -->
+				<div class="movietitle">
+					<% if(currentUser) { %>
+					<% if(!foundInLikedMovielist && !foundInDislikedMovielist) { %>
+					<a style="color: green" href="<%="/user/likedmovielist/addToLikedMovielist/" + movie.imdbid%>"
+						data-toggle="tooltip" title="Add To Liked List"><i class="far fa-thumbs-up"></i></a>
+					<% } else if(foundInLikedMovielist) { %>
+					<a style="color: green" href="<%="/user/likedmovielist/removeFromLikedMovielist/" + movie.imdbid%>"
+						data-toggle="tooltip" title="Remove From Liked List"><i class="fas fa-thumbs-up"></i></a>
+					<% } %>
+
+					<% if(!foundInDislikedMovielist && !foundInLikedMovielist) { %>
+					<a style="color: red" href="<%="/user/dislikedmovielist/addToDislikedMovielist/" + movie.imdbid%>"
+						data-toggle="tooltip" title="Add To Disliked List"><i class="far fa-thumbs-down"></i></a>
+					<% } else if(foundInDislikedMovielist) { %>
+					<a style="color: red"
+						href="<%="/user/dislikedmovielist/removeFromDislikedMovielist/" + movie.imdbid%>"
+						data-toggle="tooltip" title="Remove From Disliked List"><i class="fas fa-thumbs-down"></i></a>
+					<% } %>
+
+					<% if(!foundInWatchlist) { %>
+					<a href="<%="/user/mywatchlist/addToWatchlist/" + movie.imdbid%>" data-toggle="tooltip"
+						title="Add To Watchlist"><i style="color: lightcoral" class="far fa-plus-square"></i></a>
+					<% } else { %>
+					<a href="<%="/user/mywatchlist/removeFromWatchlist/" + movie.imdbid%>" data-toggle="tooltip"
+						title="Remove From Watchlist"><i style="color:lightcoral" class="fas fa-plus-square"></i></a>
+					<% } %>
+					<% } %>
+					<span><%= movie.title %> </span>
+					<span class="year">(<%= movie.year %>)</span>
+				</div>
+				<div class="d-flex">
+					<!-- IMDb Rating -->
+					<div class="rating d-flex align-items-center">
+						<div class="m-r-5">
+							<i class="fas fa-star" style="font-size: 2rem"></i>
+						</div>
+						<div>
+							<%= movie.imdbrating %><span class="max-rating">/10</span>
+							<div class="m-0 votes"><%= movie.imdbvotes %></div>
+						</div>
+					</div>
+					<!-- My Rating -->
+					<% if(currentUser) { %>
+					<% let addUrl = `/user/myratings/addRating/${movie.imdbid}`; %>
+					<% let updateUrl = `/user/myratings/updateRating/${movie.imdbid}`; %>
+					<% let removeUrl = `/user/myratings/removeRating/${movie.imdbid}`; %>
+					<% if(!foundInRatingList) { %>
+					<% var thisformUrl = addUrl; %>
+					<% } else { %>
+					<% var thisformUrl = updateUrl; %>
+					<% } %>
+					<div class="d-flex align-items-center m-l-20">
+						<div class="m-r-5">
+							<% if(!foundInRatingList) { %>
+							<i style="font-size: 2rem; color: blue" class="far fa-star"></i>
+							<% } else { %>
+							<i style="font-size: 2rem; color: blue" class="fas fa-star"></i>
+							<% } %>
+						</div>
+						<div>
+							<form action="<%=thisformUrl%>">
+								<select class="btn-group dropleft myrating-select custom-select custom-select-sm"
+									name="rating" onchange="this.form.submit()">
+									<option selected><%=rating%></option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+								</select>
+							</form>
+						</div>
+						<div class="myrating-delete">
+							<% if(!foundInRatingList) { %>
+							<a href="<%= removeUrl %>" datatoggle="tooltip" title="Remove Your Rating"
+								class="btn-link disabled"><i class="fas fa-times-circle"></i></a>
+							<% } else { %>
+							<a href="<%= removeUrl %>" datatoggle="tooltip" title="Remove Your Rating"><i
+									class="fas fa-times-circle"></i></a>
+							<% } %>
+						</div>
+					</div>
+					<% } %>
+				</div>
+			</div>
+
+			<!-- Row 2 of Jumbotron -->
+			<div class="row2 d-flex flex-column flex-md-row justify-content-around">
+				<div>
+					<%= movie.rated %>
+				</div>
+				<div class="vhr"></div>
+				<div>
+					<%= display(runtime); %>
+				</div>
+				<div class="vhr"></div>
+				<div>
+					<% if(genrearray.length > 3) { %>
+					<%= genrearray[0] + "," + genrearray[1] + "," + genrearray[2] %>
+					<% } else { %>
+					<%= movie.genre %>
+					<% } %>
+				</div>
+				<div class="vhr"></div>
+				<div>
+					<%= movie.released %> (<%= countryarray[0] %>)
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<!-- Poster -->
+		<div class="row d-flex flex-column flex-lg-row">
+			<div class="col-lg-4 col-md-4">
+				<img width="300px" height="450px" src="<%= movie.poster %>" alt="Image Not Available"
+					onerror="this.onerror=null;this.src='Images/notfound.jpg';">
+			</div>
+			<div class="col-lg-8 col-md-8">
+				<% var youtubebaseurl = "https://www.youtube.com/embed/" %>
+				<% var trailer = youtubebaseurl + trailerlink %>
+				<% if(trailerlink != null){ %>
+				<div class="embed-responsive embed-responsive-16by9">
+					<iframe class="embed-responsive-item" src="<%= trailer %>" allowfullscreen></iframe>
+				</div>
+				<% } %>
+			</div>
+		</div>
+
+		<hr>
+		<!-- Plot -->
+		<div class="plot">
+			<h2>Plot</h2>
+			<%= movie.plot %>
+		</div>
+		<hr>
+		<!-- Cast Information -->
+		<div class="castinfo">
+			<div>
+				<strong>Directors:</strong> &nbsp; <span><%= movie.director %></span>
+			</div>
+			<div>
+				<strong>Writers:</strong> &nbsp; <span><%= movie.writer %></span>
+			</div>
+			<div>
+				<strong>Stars:</strong> &nbsp; <span><%= movie.actors %></span>
+			</div>
+		</div>
+		<hr>
+		<!-- External Ratings -->
+		<div class="row">
+			<div class="col-lg-12 externalratings">
+				<!-- MetaScore -->
+				<% if(movie.metascore == 'N/A' ) { %>
+				<span></span>
+				<% } else if(movie.metascore >= 61 ) { %>
+				<span class="p-10 universalacclaim"><%= movie.metascore %> </span>
+				<% } else if(movie.metascore >= 40 && movie.metascore <= 60 ) { %>
+				<span class="p-10 mixed"><%= movie.metascore %> </span>
+				<% } else if(movie.metascore <= 39 ) { %>
+				<span class="p-10 overwhelmingdisliked"><%= movie.metascore %> </span>
+				<% } else { %>
+				<span class="p-10"><%= movie.metascore %> </span>
+				<% } %>
+				<span class="p-10"> <a href="https://www.imdb.com/title/<%=movie.imdbid%>/criticreviews"
+						target="_blank">Metascore</a></span>
+
+				<!-- Rotten Tomatoes -->
+				<% if(movie.ratings.length > 1) { %>
+				<% if( movie.ratings[1].Value.split("/")[0].replace("%", "") >= 60 ){ %>
+				<img src="/Images/tomato.png">
+				<% } else { %>
+				<img src="/Images/rotten-tomato.png">
+				<% } %>
+				<span> <%= movie.ratings[1].Value %> </span>
+				<% } %>
+				<span class="p-10"><a href="https://www.rottentomatoes.com/<%=movietype%>/<%=moviename%>"
+						target="_blank">Rotten
+						Tomatoes</a> </span>
+			</div>
+		</div>
+		<hr>
+		<!-- Awards -->
+		<div style="background: rgb(239, 227, 164);color: black;padding: 20px">
+			<% if(movie.awards === "N/A") { %>
+			<div>No Awards</div>
+			<% } else { %>
+			<%= movie.awards %>
+			<% } %>
+		</div>
+		<hr>
+		<!-- Details -->
+		<h2>Details</h2>
+		<div><strong>Type: &nbsp; </strong> <span style="text-transform:capitalize"><%= movie.type %></span></div>
+		<div><strong>Genre: &nbsp; </strong> <%= movie.genre %></div>
+		<div><strong>Certification: &nbsp; </strong> <%= movie.rated %></div>
+		<div><strong>Official Sites: &nbsp; </strong> <a href="<%= movie.website %>" target="_blank">Official site</a>
+		</div>
+		<div><strong>Country: &nbsp; </strong> <%= movie.country %></div>
+		<div><strong>Language: &nbsp; </strong> <%= movie.language %></div>
+		<div><strong>Status: &nbsp; </strong> <%= movie.status %></div>
+		<div><strong>Release Date: &nbsp; </strong> <%= movie.released %></div>
+		<hr>
+
+		<!-- Get Recommendation & Similar Movies -->
+
+		<% if(movie.type == "movie") { %>
+
+		<div>
+			<span class="get-button-span">
+				<!-- Get Recommendations -->
+
+				<a href="/search/get/recommendations/<%=tmdbId%>">
+					<button type="button" class="btn btn-primary btn-lg">Get Recommendations</button>
+				</a>
+
+				<!-- /Get Recommendations -->
+			</span>
+
+			<span class="get-button-span">
+				<!-- Get Similar -->
+
+				<a href="/search/get/similar/<%=tmdbId%>">
+					<button type="button" class="btn btn-primary btn-lg">Get Similar Movies</button>
+				</a>
+
+				<!-- /Get Similar -->
+			</span>
+		</div>
+
+		<hr>
+		<% } %>
+
+		<!-- Tagline -->
+		<% if(movie.tagline){ %>
+		<div class="tagline">
+			<h2>Tagline</h2>
+			<%= movie.tagline %>
+		</div>
+		<hr>
+		<% } %>
+
+		<!-- Box Office Collection -->
+		<% if(movie.boxoffice){ %>
+		<h2>Box Office</h2>
+		<div>
+			<strong>Worldwide Gross: &nbsp; </strong>
+			$<%= (movie.boxoffice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); %>
+		</div>
+		<hr>
+		<% } %>
+
+		<h2>Company Credits</h2>
+		<div>
+			<% for (i in movie.production) { %>
+			<div style="margin-top: 15px; margin-bottom: 15px">
+				<% productionImageUrl = `https://image.tmdb.org/t/p/w154${movie.production[i].logo_path}` %>
+				<span style="margin-right: 10px">
+					<img src="<%= productionImageUrl %>" alt="&nbsp;Image Not Available&nbsp;">
+				</span>
+				<%= movie.production[i].name %>
+			</div>
+			<% } %>
+		</div>
+		<hr>
+
+		<h2>Technical Details</h2>
+		<div><strong>Runtime: &nbsp; </strong> <%= runtime %> minutes</div>
+		<% if(flagMovie){ %>
+		<div><strong>DVD Release: &nbsp; </strong> <%= movie.dvd %></div>
+		<% } %>
+		<hr>
+
+		<!-- Imdb Button -->
+		<a href="https://www.imdb.com/title/<%=movie.imdbid%>" target="_blank">
+			<button type="button" class="btn btn-primary btn-lg">View On IMDb</button>
+		</a>
+		<hr>
+	</div>
+
+	<% include partials/footer %>

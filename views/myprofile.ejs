@@ -1,0 +1,48 @@
+<% include partials/header %>
+
+<!-- navbar -->
+<% include partials/navbar %>
+<!-- /navbar -->
+
+<!-- flash -->
+<% include partials/flash %>
+<!-- /flash -->
+
+<div class="container">
+  <div class="card my-profile-card" style="width: 24rem;">
+    <!-- <img src="<%=currentUser.image%>" style="width:100%" alt="User Profile Pic"
+      onerror="this.onerror=null;this.src='/Images/dp.png'"> -->
+    <div class="card-body profile">
+      <h3 class="card-title">
+        <%= currentUser.firstname %> <%= currentUser.lastname %>
+        <a style="float: right; color:cornflowerblue" href="/user/edit">
+          <i class="far fa-edit"></i>
+        </a>
+      </h3>
+      <p class="card-text">
+        <i class="fas fa-user"></i>
+        <%= currentUser.username %>
+      </p>
+      <p class="card-text">
+        <i class="fas fa-envelope"></i>
+        <a style="color: #D44638" href="mailto:<%=currentUser.email%>">
+          <%= currentUser.email %>
+        </a>
+      </p>
+
+      <div>
+        <a href="/user/likedMovielist" style="color: green" data-toggle="tooltip" title="Show my Liked Movies">
+          <i class="fas fa-thumbs-up"></i>
+          <%= currentUser.likedMovielist.length %>
+        </a>
+        &nbsp;
+        <a href="/user/dislikedMovielist" style="color: red" data-toggle="tooltip" title="Show my Disliked Movies">
+          <i class="fas fa-thumbs-down"></i>
+          <%= currentUser.dislikedMovielist.length %>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% include partials/footer %>
