@@ -345,6 +345,19 @@ h2 {
 } */
 
 /* IMDb Rating Styling */
+.votes {
+	color: rgb(192, 192, 192);
+	font-size: 0.5em;
+}
+
+.fa-star {
+	color: rgb(228, 187, 36);
+}
+
+.max-rating {
+	font-size: .5em;
+	color: rgb(192, 192, 192);
+}
 
 
 /* ================================ */
