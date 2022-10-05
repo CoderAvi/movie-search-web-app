@@ -37,6 +37,16 @@ app.use(cookieParser("Hello, This is my Secret Line"));
 app.use(flash()); //for flash messages
 
 // Mongoose connect ===============================================================
+mongoose
+  .connect(config.dbUrl, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("DB Connected Successfully");
+  })
+  .catch(err => console.log(err));
 
 
 // Express Session Setup ==========================================================
